@@ -2,102 +2,86 @@
 //  ProductView.swift
 //  Product Shop API Homework
 //
-//  Created by Lala Suleymanova on 20.08.26.
+//  Created by Lala Suleymanova on 21.08.26.
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct ProductView: View {
     
-    @Bindable var viewModel : ProductViewModel
-    var categories : [String] {
-        ["All"] + viewModel.categories.map( {$0.name} )
-    }
-    @State private var selectedCategory = "All"
+    @State var product : Product
     
-    var header: some View {
-        HStack(alignment: .top) {
-            VStack(alignment: .leading, spacing: 10){
-                Text("Good morning")
-                    .font(.system(size: 12, weight: .regular))
-                    .foregroundStyle(Color(.secondary))
-                Text("""
-                     Find your next favorite
-                     product
-                     """)
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundStyle(.white)
-                Text("Fresh picks for you")
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color(.lightOrange))
-            }
+    var image : some View {
+        ZStack(alignment: .topLeading) {
+            WebImage(url: URL(string: product.image))
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity)
+                .frame(height: 120)
+                .padding()
+                .background(Color(.secondarySystemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 14))
+            
+            Text("★ \(product.rating.formatted())")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(.yellow)
+                .padding(.leading, 12)
+                .padding(.top, 12)
+        }
+    }
+    
+    var info : some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(product.title)
+                .font(.system(size: 13, weight: .semibold))
+                .lineLimit(1)
+            
+            Text(product.brand)
+                .font(.system(size: 10, weight: .regular))
+                .foregroundStyle(.secondary)
+        }
+        
+    }
+    
+    var priceAndBuy : some View {
+        
+        HStack {
+            Text("$\(product.price.formatted())")
+                .font(.system(size: 14, weight: .semibold))
+            
             Spacer()
             
-            Text("20% OFF")
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(.white)
-                .padding(.horizontal)
-                .padding(.vertical, 10)
-                .background(.main)
-                .clipShape(RoundedRectangle(cornerRadius: 24))
-        }
-        .padding()
-        .background(.headerBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 22))
-    }
-    
-    var searchBar: some View {
-        HStack(spacing: 10) {
-            Image(systemName: "magnifyingglass")
-                .foregroundStyle(.gray)
-
-            TextField("Search Products", text: $viewModel.searchPhrase)
-        }
-        .padding()
-        .background(.white)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-    }
-    
-    var categoryCarousel : some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                ForEach(categories, id: \.self) { category in
-                    Button{
-                        selectedCategory = category
-                    } label: {
-                        Text(category.capitalized)
-                            .font(.system(size: 14, weight: .semibold))
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 10)
-                            .background(
-                                selectedCategory == category ? Color(.main): Color(.secondary)
-                            )
-                            .foregroundStyle(
-                                selectedCategory == category ? .white : .black
-                            )
-                            .clipShape(RoundedRectangle(cornerRadius: 18))
-                    }
-                }
+            Button{
+                
+            } label: {
+                Image(systemName: "plus")
+                    .padding(12)
+                    .foregroundStyle(.white)
+                    .background(.main)
+                    .frame(width: 30, height: 30)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
             }
         }
     }
     
     var body: some View {
         ZStack {
-            Color(.mainBackground)
+            Color(.systemGroupedBackground)
                 .ignoresSafeArea()
-            ScrollView {
-                VStack(spacing: 20) {
-                    header
-                    searchBar
-                    categoryCarousel
-                }
-                .padding(20)
+            VStack(alignment: .leading, spacing: 12) {
+                image
+                info
+                priceAndBuy
             }
+            .padding()
+            .background(.white)
+            .clipShape(RoundedRectangle(cornerRadius: 14))
         }
     }
 }
 
 #Preview {
-    ProductView(viewModel: ProductViewModel())
+    @Previewable @State var product = Product.sample[0]
+    ProductView(product: product)
 }

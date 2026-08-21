@@ -14,7 +14,7 @@ struct MainTabView: View {
         TabView{
             Tab("", systemImage: "house") {
                 NavigationStack {
-                    ProductView(viewModel: viewModel)
+                    ProductHomeView(viewModel: viewModel)
                 }
             }
             
