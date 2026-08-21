@@ -14,7 +14,7 @@ struct ProductView: View {
     
     var image : some View {
         ZStack(alignment: .topLeading) {
-            WebImage(url: URL(string: product.image))
+            WebImage(url: URL(string: product.images[0]))
                 .resizable()
                 .scaledToFit()
                 .frame(maxWidth: .infinity)
@@ -35,11 +35,12 @@ struct ProductView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text(product.title)
                 .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(.black)
                 .lineLimit(1)
             
             Text(product.brand)
                 .font(.system(size: 10, weight: .regular))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.gray)
         }
         
     }
@@ -49,6 +50,7 @@ struct ProductView: View {
         HStack {
             Text("$\(product.price.formatted())")
                 .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(.black)
             
             Spacer()
             

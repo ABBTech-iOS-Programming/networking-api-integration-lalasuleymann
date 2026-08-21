@@ -100,23 +100,29 @@ struct ProductHomeView: View {
             spacing: 12
         ) {
             ForEach(filteredProducts) { product in
-                ProductView(product: product)
+                NavigationLink {
+                    ProductDetailView(product: product)
+                } label: {
+                    ProductView(product: product)
+                }
             }
         }
     }
     
     var body: some View {
-        ZStack {
-            Color(.mainBackground)
-                .ignoresSafeArea()
-            ScrollView {
-                VStack(spacing: 20) {
-                    header
-                    searchBar
-                    categoryCarousel
-                    productGrid
+        NavigationStack {
+            ZStack {
+                Color(.mainBackground)
+                    .ignoresSafeArea()
+                ScrollView {
+                    VStack(spacing: 20) {
+                        header
+                        searchBar
+                        categoryCarousel
+                        productGrid
+                    }
+                    .padding(20)
                 }
-                .padding(20)
             }
         }
     }
