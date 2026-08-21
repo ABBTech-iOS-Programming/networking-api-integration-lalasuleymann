@@ -10,6 +10,10 @@ import SwiftUI
 struct ProductView: View {
     
     @Bindable var viewModel : ProductViewModel
+    var categories : [String] {
+        ["All"] + viewModel.categories.map( {$0.name} )
+    }
+    @State private var selectedCategory = "All"
     
     var header: some View {
         HStack(alignment: .top) {
@@ -54,6 +58,30 @@ struct ProductView: View {
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
     
+    var categoryCarousel : some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(categories, id: \.self) { category in
+                    Button{
+                        selectedCategory = category
+                    } label: {
+                        Text(category.capitalized)
+                            .font(.system(size: 14, weight: .semibold))
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 10)
+                            .background(
+                                selectedCategory == category ? Color(.main): Color(.secondary)
+                            )
+                            .foregroundStyle(
+                                selectedCategory == category ? .white : .black
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 18))
+                    }
+                }
+            }
+        }
+    }
+    
     var body: some View {
         ZStack {
             Color(.mainBackground)
@@ -62,6 +90,7 @@ struct ProductView: View {
                 VStack(spacing: 20) {
                     header
                     searchBar
+                    categoryCarousel
                 }
                 .padding(20)
             }

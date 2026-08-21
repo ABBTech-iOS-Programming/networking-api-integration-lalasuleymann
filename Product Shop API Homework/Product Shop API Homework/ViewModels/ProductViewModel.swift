@@ -10,5 +10,6 @@ import Observation
 
 @Observable final class ProductViewModel {
     var products : [Product] = Product.sample
+    var categories : [CategoryResponse] = CategoryResponse.sample
     var searchPhrase : String = ""
 }
