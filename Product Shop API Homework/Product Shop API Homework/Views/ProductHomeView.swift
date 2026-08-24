@@ -192,6 +192,17 @@ struct ProductHomeView: View {
                 }
             }
         }
+        .refreshable {
+            await viewModel.fetchCategoryData()
+
+            if selectedCategory == "All" {
+                await viewModel.fetchAllProducts()
+            } else {
+                await viewModel.fetchDataAccordingToCategory(
+                    category: selectedCategory
+                )
+            }
+        }
     }
 }
 

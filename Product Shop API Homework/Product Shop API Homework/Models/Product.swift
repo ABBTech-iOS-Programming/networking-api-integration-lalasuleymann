@@ -34,7 +34,6 @@ struct Product: Codable, Identifiable {
         case brand
         case thumbnail
         case images
-        
     }
 
     init(from decoder: Decoder) throws {
