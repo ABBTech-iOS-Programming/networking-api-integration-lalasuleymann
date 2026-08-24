@@ -102,6 +102,7 @@ struct ProductHomeView: View {
             ForEach(filteredProducts) { product in
                 NavigationLink {
                     ProductDetailView(product: product)
+                        .toolbar(.hidden, for: .tabBar)
                 } label: {
                     ProductView(product: product)
                 }

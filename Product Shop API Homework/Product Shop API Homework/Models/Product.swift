@@ -36,7 +36,8 @@ extension Product {
             thumbnail: "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
             images: [
                 "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp",
-                "https://cdn.dummyjson.com/product-images/beauty/red-lipstick/1.webp"
+                "https://cdn.dummyjson.com/product-images/beauty/red-lipstick/1.webp",
+                "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
             ]
         ),
         Product(
