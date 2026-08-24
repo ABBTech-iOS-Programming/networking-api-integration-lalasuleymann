@@ -59,23 +59,39 @@ struct ProductView: View {
         
     }
     
-    var priceAndBuy : some View {
-        
+    var discountedPrice: Double {
+        product.price - (product.price * product.discountPercentage / 100)
+    }
+    
+    var priceAndBuy: some View {
         HStack {
-            Text("$\(product.price.formatted())")
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(.black)
-            
+            VStack(alignment: .leading, spacing: 2) {
+
+                if product.discountPercentage > 0 {
+                    Text("$\(discountedPrice, specifier: "%.2f")")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(.red)
+
+                    Text("$\(product.price, specifier: "%.2f")")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.gray)
+                        .strikethrough()
+                } else {
+                    Text("$\(product.price, specifier: "%.2f")")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(.red)
+                }
+            }
+
             Spacer()
-            
-            Button{
+
+            Button {
                 
             } label: {
                 Image(systemName: "plus")
-                    .padding(12)
                     .foregroundStyle(.white)
-                    .background(.main)
                     .frame(width: 30, height: 30)
+                    .background(.main)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
             }
         }
@@ -100,8 +116,14 @@ struct ProductView: View {
 #Preview {
     @Previewable @State var viewModel = ProductViewModel()
 
-    ProductView(product: viewModel.products[0])
-        .task {
-            await viewModel.fetchDataAccordingToCategory(category: "beauty")
+    Group {
+        if let product = viewModel.products.first {
+            ProductView(product: product)
+        } else {
+            ProgressView("Loading...")
         }
+    }
+    .task {
+        await viewModel.fetchDataAccordingToCategory(category: "beauty")
+    }
 }

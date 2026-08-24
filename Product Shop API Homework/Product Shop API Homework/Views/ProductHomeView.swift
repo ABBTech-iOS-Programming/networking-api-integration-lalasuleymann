@@ -21,17 +21,14 @@ struct ProductHomeView: View {
         switch viewModel.state {
         case .idle, .loading:
             ProgressView("Loading...")
-
         case .loaded:
             productGrid
-
         case .empty:
             ContentUnavailableView(
                 "No products",
                 systemImage: "text.page",
                 description: Text("There are no products to display")
             )
-
         case .error(let message):
             ContentUnavailableView {
                 Label(

@@ -61,24 +61,20 @@ final class ProductViewModel {
 
     func fetchAllProducts() async {
         state = .loading
-
         var allProducts: [Product] = []
 
         for category in categories {
             guard let url = URL(string: urlStringProducts + category) else {
                 continue
             }
-
+            
             do {
                 let (data, _) = try await URLSession.shared.data(from: url)
-
                 let response = try JSONDecoder().decode(
                     ProductResponse.self,
                     from: data
                 )
-
                 allProducts.append(contentsOf: response.products)
-
             } catch {
                 state = .error("Error fetching \(category): \(error)")
                 return
@@ -97,7 +93,6 @@ final class ProductViewModel {
 
     func fetchDataAccordingToCategory(category: String) async {
         state = .loading
-
         guard let url = URL(string: urlStringProducts + category) else {
             state = .error("Invalid url")
             return
@@ -105,17 +100,14 @@ final class ProductViewModel {
 
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
-
             guard let httpResponse = response as? HTTPURLResponse else {
                 state = .error("Invalid response")
                 return
             }
-
             guard (200...299).contains(httpResponse.statusCode) else {
                 state = .error("Server error")
                 return
             }
-
             let productsResponse = try JSONDecoder().decode(
                 ProductResponse.self,
                 from: data

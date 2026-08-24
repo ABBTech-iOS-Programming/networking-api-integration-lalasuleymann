@@ -173,22 +173,38 @@ struct ProductDetailView: View {
         }
     }
     
+    var discountedPrice: Double {
+        product.price - (product.price * product.discountPercentage / 100)
+    }
     
-    var footer : some View {
+    var footer: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Price")
                     .font(.system(size: 11, weight: .regular))
                     .foregroundStyle(.secondary)
-                
-                Text("$\(product.price.formatted())")
-                    .font(.system(size: 24, weight: .bold))
-                    .foregroundStyle(.main)
+
+                if product.discountPercentage > 0 {
+                    HStack(alignment: .bottom, spacing: 6) {
+                        Text("$\(discountedPrice, specifier: "%.2f")")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundStyle(.main)
+
+                        Text("$\(product.price, specifier: "%.2f")")
+                            .font(.system(size: 12))
+                            .foregroundStyle(.secondary)
+                            .strikethrough()
+                    }
+                } else {
+                    Text("$\(product.price, specifier: "%.2f")")
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundStyle(.main)
+                }
             }
-            
+
             Spacer()
-            
-            Button{
+
+            Button {
                 print("add to cart")
             } label: {
                 Text("Add to cart")
@@ -226,31 +242,5 @@ struct ProductDetailView: View {
                 }
             }
         }
-    }
-}
-
-#Preview {
-    @Previewable @State var viewModel = ProductViewModel()
-
-    Group {
-        if let product = viewModel.products.first {
-            ProductDetailView(
-                product: Binding(
-                    get: {
-                        product
-                    },
-                    set: { newValue in
-                        if let index = viewModel.products.firstIndex(where: { $0.id == newValue.id }) {
-                            viewModel.products[index] = newValue
-                        }
-                    }
-                )
-            )
-        } else {
-            ProgressView()
-        }
-    }
-    .task {
-        await viewModel.fetchDataAccordingToCategory(category: "beauty")
     }
 }
