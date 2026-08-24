@@ -91,7 +91,7 @@ struct ProductHomeView: View {
         }
     }
     
-    var productGrid : some View {
+    var productGrid: some View {
         LazyVGrid(
             columns: [
                 GridItem(spacing: 10),
@@ -99,12 +99,15 @@ struct ProductHomeView: View {
             ],
             spacing: 12
         ) {
-            ForEach(filteredProducts) { product in
-                NavigationLink {
-                    ProductDetailView(product: product)
-                        .toolbar(.hidden, for: .tabBar)
-                } label: {
-                    ProductView(product: product)
+            ForEach($viewModel.products) { $product in
+                
+                if selectedCategory == "All" || product.category == selectedCategory {
+                    NavigationLink {
+                        ProductDetailView(product: $product)
+                            .toolbar(.hidden, for: .tabBar)
+                    } label: {
+                        ProductView(product: product)
+                    }
                 }
             }
         }

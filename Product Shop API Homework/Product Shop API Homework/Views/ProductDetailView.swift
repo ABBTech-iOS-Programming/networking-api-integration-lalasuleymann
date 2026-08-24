@@ -9,10 +9,9 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct ProductDetailView: View {
-    @State var product : Product
+    @Binding var product : Product
     @State var quantityValue = 1
     @State private var currentImageIndex = 0
-    
     
     var indicator: some View {
         HStack(spacing: 8) {
@@ -120,8 +119,7 @@ struct ProductDetailView: View {
             description
         }
     }
-    
-    
+
     
     var quantity : some View {
         VStack(alignment: .leading) {
@@ -208,9 +206,10 @@ struct ProductDetailView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button{
-                    print("love itttt")
+                    product.isFavorite.toggle()
                 } label: {
-                    Image(systemName: "heart")
+                    Image(systemName: product.isFavorite ? "heart.fill" : "heart")
+                        .foregroundStyle(product.isFavorite ? .red : .black)
                 }
             }
         }
@@ -219,5 +218,5 @@ struct ProductDetailView: View {
 
 #Preview {
     @Previewable @State var product = Product.sample[0]
-    ProductDetailView(product: product)
+    ProductDetailView(product: $product)
 }

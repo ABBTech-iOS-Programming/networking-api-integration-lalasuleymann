@@ -19,10 +19,11 @@ struct Product: Codable, Identifiable {
     let brand: String
     let thumbnail: String
     let images: [String]
+    var isFavorite: Bool
 }
 
 extension Product {
-    static let sample : [Product] = [
+    static let sample: [Product] = [
         Product(
             id: 1,
             title: "Essence Mascara Lash Princess",
@@ -38,8 +39,10 @@ extension Product {
                 "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp",
                 "https://cdn.dummyjson.com/product-images/beauty/red-lipstick/1.webp",
                 "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
-            ]
+            ],
+            isFavorite: true
         ),
+
         Product(
             id: 2,
             title: "Essence Mascara Lash Princess",
@@ -51,10 +54,12 @@ extension Product {
             stock: 99,
             brand: "Essence",
             thumbnail: "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
-            images:[
+            images: [
                 "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
-            ]
+            ],
+            isFavorite: false
         ),
+
         Product(
             id: 3,
             title: "Essence Mascara Lash Princess",
@@ -66,10 +71,12 @@ extension Product {
             stock: 99,
             brand: "Essence",
             thumbnail: "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
-            images:[
+            images: [
                 "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
-            ]
+            ],
+            isFavorite: true
         ),
+
         Product(
             id: 4,
             title: "Essence Mascara Lash Princess",
@@ -81,9 +88,10 @@ extension Product {
             stock: 99,
             brand: "Essence",
             thumbnail: "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
-            images:[
+            images: [
                 "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
-            ]
+            ],
+            isFavorite: false
         )
     ]
 }

@@ -19,6 +19,9 @@ struct MainTabView: View {
             }
             
             Tab("", systemImage: "heart") {
+                NavigationStack {
+                    FavoriteView(viewModel: viewModel)
+                }
             }
             
             Tab("", systemImage: "square") {
