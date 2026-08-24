@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CategoryResponse {
+struct CategoryResponse : Decodable {
     let name : String
 }
 

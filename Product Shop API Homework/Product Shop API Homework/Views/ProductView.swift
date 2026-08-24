@@ -14,15 +14,29 @@ struct ProductView: View {
     
     var image : some View {
         ZStack(alignment: .topLeading) {
-            WebImage(url: URL(string: product.images[0]))
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity)
-                .frame(height: 120)
-                .padding()
-                .background(Color(.secondarySystemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 14))
+            if product.images.isEmpty {
+                Image(systemName: "photo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 50, height: 50)
+                        .foregroundStyle(.gray)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 120)
+                        .padding()
+                        .background(Color(.secondarySystemBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+            } else {
+                WebImage(url: URL(string: product.images[0]))
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 120)
+                    .padding()
+                    .background(Color(.secondarySystemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+            }
             
+
             Text("★ \(product.rating.formatted())")
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(.yellow)

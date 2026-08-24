@@ -32,26 +32,39 @@ struct ProductDetailView: View {
     
     var image: some View {
         VStack(spacing: 12) {
-            TabView(selection: $currentImageIndex) {
-                ForEach(product.images.indices, id: \.self) { index in
-                    WebImage(url: URL(string: product.images[index]))
+            if product.images.isEmpty {
+                Image(systemName: "photo")
                         .resizable()
                         .scaledToFit()
-                        .frame(
-                            width: UIScreen.main.bounds.width - 40,
-                            height: 280
-                        )
+                        .frame(width: 50, height: 50)
+                        .foregroundStyle(.gray)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 120)
+                        .padding()
                         .background(Color(.secondarySystemBackground))
-                        .clipShape(
-                            RoundedRectangle(cornerRadius: 24)
-                        )
-                        .tag(index)
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+            } else {
+                TabView(selection: $currentImageIndex) {
+                    ForEach(product.images.indices, id: \.self) { index in
+                        WebImage(url: URL(string: product.images[index]))
+                            .resizable()
+                            .scaledToFit()
+                            .frame(
+                                width: UIScreen.main.bounds.width - 40,
+                                height: 280
+                            )
+                            .background(Color(.secondarySystemBackground))
+                            .clipShape(
+                                RoundedRectangle(cornerRadius: 24)
+                            )
+                            .tag(index)
+                    }
                 }
+                .frame(height: 280)
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                
+                indicator
             }
-            .frame(height: 280)
-            .tabViewStyle(.page(indexDisplayMode: .never))
-
-            indicator
         }
     }
     

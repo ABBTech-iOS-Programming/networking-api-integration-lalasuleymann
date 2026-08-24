@@ -11,7 +11,7 @@ struct ProductHomeView: View {
     
     @Bindable var viewModel : ProductViewModel
     var categories : [String] {
-        ["All"] + viewModel.categories.map( {$0.name} )
+        ["All"] + viewModel.categories
     }
     @State private var selectedCategory = "All"
     
@@ -128,6 +128,9 @@ struct ProductHomeView: View {
                     .padding(20)
                 }
             }
+        }
+        .task {
+            await viewModel.fetchCategoryData()
         }
     }
 }
