@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ProductResponse: Codable {
+struct ProductResponse: Decodable {
     let products: [Product]
     let total: Int
     let skip: Int

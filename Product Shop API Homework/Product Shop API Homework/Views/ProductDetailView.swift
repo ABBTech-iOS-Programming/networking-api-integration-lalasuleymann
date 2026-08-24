@@ -81,7 +81,7 @@ struct ProductDetailView: View {
                 Text("·")
                     .foregroundStyle(.secondary)
                 
-                Text(product.brand)
+                Text(product.brand ?? "Unknown")
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(.secondary)
             }
@@ -230,6 +230,27 @@ struct ProductDetailView: View {
 }
 
 #Preview {
-    @Previewable @State var product = Product.sample[0]
-    ProductDetailView(product: $product)
+    @Previewable @State var viewModel = ProductViewModel()
+
+    Group {
+        if let product = viewModel.products.first {
+            ProductDetailView(
+                product: Binding(
+                    get: {
+                        product
+                    },
+                    set: { newValue in
+                        if let index = viewModel.products.firstIndex(where: { $0.id == newValue.id }) {
+                            viewModel.products[index] = newValue
+                        }
+                    }
+                )
+            )
+        } else {
+            ProgressView()
+        }
+    }
+    .task {
+        await viewModel.fetchDataAccordingToCategory(category: "beauty")
+    }
 }

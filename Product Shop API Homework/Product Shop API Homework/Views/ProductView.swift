@@ -52,7 +52,7 @@ struct ProductView: View {
                 .foregroundStyle(.black)
                 .lineLimit(1)
             
-            Text(product.brand)
+            Text(product.brand ?? "Unkown")
                 .font(.system(size: 10, weight: .regular))
                 .foregroundStyle(.gray)
         }
@@ -98,6 +98,10 @@ struct ProductView: View {
 }
 
 #Preview {
-    @Previewable @State var product = Product.sample[0]
-    ProductView(product: product)
+    @Previewable @State var viewModel = ProductViewModel()
+
+    ProductView(product: viewModel.products[0])
+        .task {
+            await viewModel.fetchDataAccordingToCategory(category: "beauty")
+        }
 }

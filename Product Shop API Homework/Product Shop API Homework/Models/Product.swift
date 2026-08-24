@@ -16,82 +16,42 @@ struct Product: Codable, Identifiable {
     let discountPercentage: Double
     let rating: Double
     let stock: Int
-    let brand: String
+    let brand: String?
     let thumbnail: String
     let images: [String]
-    var isFavorite: Bool
-}
 
-extension Product {
-    static let sample: [Product] = [
-        Product(
-            id: 1,
-            title: "Essence Mascara Lash Princess",
-            description: "The Essence Mascara Lash Princess is a popular mascara that provides volume and length.",
-            category: "beauty",
-            price: 19.99,
-            discountPercentage: 10.48,
-            rating: 2.56,
-            stock: 99,
-            brand: "Essence",
-            thumbnail: "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
-            images: [
-                "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp",
-                "https://cdn.dummyjson.com/product-images/beauty/red-lipstick/1.webp",
-                "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
-            ],
-            isFavorite: true
-        ),
+    var isFavorite: Bool = false
 
-        Product(
-            id: 2,
-            title: "Essence Mascara Lash Princess",
-            description: "The Essence Mascara Lash Princess is a popular mascara that provides volume and length.",
-            category: "furniture",
-            price: 119.99,
-            discountPercentage: 10.48,
-            rating: 2.56,
-            stock: 99,
-            brand: "Essence",
-            thumbnail: "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
-            images: [
-                "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
-            ],
-            isFavorite: false
-        ),
+    enum CodingKeys: String, CodingKey {
+        case id
+        case title
+        case description
+        case category
+        case price
+        case discountPercentage
+        case rating
+        case stock
+        case brand
+        case thumbnail
+        case images
+        
+    }
 
-        Product(
-            id: 3,
-            title: "Essence Mascara Lash Princess",
-            description: "The Essence Mascara Lash Princess is a popular mascara that provides volume and length.",
-            category: "fragrances",
-            price: 0.99,
-            discountPercentage: 10.48,
-            rating: 2.56,
-            stock: 99,
-            brand: "Essence",
-            thumbnail: "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
-            images: [
-                "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
-            ],
-            isFavorite: true
-        ),
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        Product(
-            id: 4,
-            title: "Essence Mascara Lash Princess",
-            description: "The Essence Mascara Lash Princess is a popular mascara that provides volume and length.",
-            category: "groceries",
-            price: 9.99,
-            discountPercentage: 10.48,
-            rating: 2.56,
-            stock: 99,
-            brand: "Essence",
-            thumbnail: "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
-            images: [
-                "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
-            ],
-            isFavorite: false
-        )
-    ]
+        id = try container.decode(Int.self, forKey: .id)
+        title = try container.decode(String.self, forKey: .title)
+        description = try container.decode(String.self, forKey: .description)
+        category = try container.decode(String.self, forKey: .category)
+        price = try container.decode(Double.self, forKey: .price)
+        discountPercentage = try container.decode(Double.self, forKey: .discountPercentage)
+        rating = try container.decode(Double.self, forKey: .rating)
+        stock = try container.decode(Int.self, forKey: .stock)
+        brand = try container.decodeIfPresent(String.self, forKey: .brand)
+        thumbnail = try container.decode(String.self, forKey: .thumbnail)
+        images = try container.decode([String].self, forKey: .images)
+
+        isFavorite = false
+    }
 }

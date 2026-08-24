@@ -15,12 +15,44 @@ struct ProductHomeView: View {
     }
     @State private var selectedCategory = "All"
     
-    var filteredProducts : [Product] {
-        if(selectedCategory == "All"){
-            return viewModel.products
-        }
-        return viewModel.products.filter {
-            $0.category == selectedCategory
+    
+    @ViewBuilder
+    var content: some View {
+        switch viewModel.state {
+        case .idle, .loading:
+            ProgressView("Loading...")
+
+        case .loaded:
+            productGrid
+
+        case .empty:
+            ContentUnavailableView(
+                "No products",
+                systemImage: "text.page",
+                description: Text("There are no products to display")
+            )
+
+        case .error(let message):
+            ContentUnavailableView {
+                Label(
+                    "Something went wrong",
+                    systemImage: "exclamationmark.triangle"
+                )
+            } description: {
+                Text(message)
+            } actions: {
+                Button("Try again") {
+                    Task {
+                        if selectedCategory == "All" {
+                            await viewModel.fetchAllProducts()
+                        } else {
+                            await viewModel.fetchDataAccordingToCategory(
+                                category: selectedCategory
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -118,12 +150,13 @@ struct ProductHomeView: View {
             ZStack {
                 Color(.mainBackground)
                     .ignoresSafeArea()
+                
                 ScrollView {
                     VStack(spacing: 20) {
                         header
                         searchBar
                         categoryCarousel
-                        productGrid
+                        content
                     }
                     .padding(20)
                 }
@@ -131,6 +164,18 @@ struct ProductHomeView: View {
         }
         .task {
             await viewModel.fetchCategoryData()
+            await viewModel.fetchAllProducts()
+        }
+        .onChange(of: selectedCategory) { _, newCategory in
+            Task {
+                if newCategory == "All" {
+                    await viewModel.fetchAllProducts()
+                } else {
+                    await viewModel.fetchDataAccordingToCategory(
+                        category: newCategory
+                    )
+                }
+            }
         }
     }
 }
