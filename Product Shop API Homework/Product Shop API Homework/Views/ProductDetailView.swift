@@ -186,17 +186,17 @@ struct ProductDetailView: View {
 
                 if product.discountPercentage > 0 {
                     HStack(alignment: .bottom, spacing: 6) {
-                        Text("$\(discountedPrice, specifier: "%.2f")")
+                        Text("$\(discountedPrice * Double(quantityValue), specifier: "%.2f")")
                             .font(.system(size: 24, weight: .bold))
                             .foregroundStyle(.main)
 
-                        Text("$\(product.price, specifier: "%.2f")")
+                        Text("$\(product.price * Double(quantityValue), specifier: "%.2f")")
                             .font(.system(size: 12))
                             .foregroundStyle(.secondary)
                             .strikethrough()
                     }
                 } else {
-                    Text("$\(product.price, specifier: "%.2f")")
+                    Text("$\(product.price * Double(quantityValue), specifier: "%.2f")")
                         .font(.system(size: 24, weight: .bold))
                         .foregroundStyle(.main)
                 }

@@ -15,6 +15,21 @@ struct ProductHomeView: View {
     }
     @State private var selectedCategory = "All"
     
+    var filteredProducts: [Product] {
+        viewModel.products.filter { product in
+            let matchesCategory =
+                selectedCategory == "All" ||
+                product.category == selectedCategory
+
+            let matchesSearch =
+                viewModel.searchPhrase.isEmpty ||
+                product.title.localizedCaseInsensitiveContains(
+                    viewModel.searchPhrase
+                )
+
+            return matchesCategory && matchesSearch
+        }
+    }
     
     @ViewBuilder
     var content: some View {
@@ -128,14 +143,17 @@ struct ProductHomeView: View {
             ],
             spacing: 12
         ) {
-            ForEach($viewModel.products) { $product in
-                
-                if selectedCategory == "All" || product.category == selectedCategory {
+            ForEach(filteredProducts) { product in
+                if let index = viewModel.products.firstIndex(where: { $0.id == product.id }) {
                     NavigationLink {
-                        ProductDetailView(product: $product)
-                            .toolbar(.hidden, for: .tabBar)
+                        ProductDetailView(
+                            product: $viewModel.products[index]
+                        )
+                        .toolbar(.hidden, for: .tabBar)
                     } label: {
-                        ProductView(product: product)
+                        ProductView(
+                            product: viewModel.products[index]
+                        )
                     }
                 }
             }
